@@ -6,14 +6,16 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
+  TextInput,
   Text,
   StatusBar,
+  scrollView
 } from 'react-native';
 
 import {
@@ -24,11 +26,42 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+import TodoInsert from './components/TodoInsert';
+import TodoList from './components/TodoList';
+
+const App = () => {
+  //  todos: {id: Number, textValue: string, checked: boolean }
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = text => {
+    setTodos([
+      ...todos,
+      {id: Math.random().toString(), textValue: text, checked: false},
+    ]);
+  };
+
+  const onRemove = id => e => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const onToggle = id => e => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id ? { ...todo, checked: !todo.checked} : todo,
+        ),
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.appTitle}>Hello Todolist</Text>
-    </SafeAreaView>
+  <SafeAreaView style={styles.container}>
+    <Text style={styles.appTitle}>Hello Todolist</Text>
+    <View style={styles.card}>
+      {/* <TodoInsert onAddTodo={addTodo}/> */}
+      <TodoInsert onAddTodo={addTodo}/>
+      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle}/>
+    </View>
+  </SafeAreaView>
+    
     // <>
     //   <StatusBar barStyle="dark-content" />
     //   <SafeAreaView>
@@ -123,7 +156,22 @@ const styles = StyleSheet.create({
     fontWeight:'300',
     textAlign:'center',
     marginTop: 30,
-    backgroundColor:'#3143e8'
+    backgroundColor:'#3143e8',
+    marginBottom: 30
+  },card: {
+    backgroundColor: '#fff',
+    flex: 1,
+    borderTopLeftRadius: 10, // to provide rounded corners
+    borderTopRightRadius: 10, // to provide rounded corners
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  input: {
+    padding: 20,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 1,
+    fontSize: 24,
+    marginLeft: 20,
   }
 });
 
