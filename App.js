@@ -1,178 +1,69 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {Component} from 'react';
+import {StyleSheet, Text, View, Image, TextInput} from 'react-native';
+import CustomButton from './CustomButton';
 
-import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  TextInput,
-  Text,
-  StatusBar,
-  scrollView
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import TodoInsert from './components/TodoInsert';
-import TodoList from './components/TodoList';
-
-const App = () => {
-  //  todos: {id: Number, textValue: string, checked: boolean }
-  const [todos, setTodos] = useState([]);
-
-  const addTodo = text => {
-    setTodos([
-      ...todos,
-      {id: Math.random().toString(), textValue: text, checked: false},
-    ]);
-  };
-
-  const onRemove = id => e => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  const onToggle = id => e => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, checked: !todo.checked} : todo,
-        ),
+type Props = {};
+export default class Login extends Component<Props> {
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header} />
+        <View style={styles.title}>
+          <Text style={{fontSize:35,paddingBottom:20}}>로그인</Text>
+          <View style={{width:"100%",borderBottomWidth:0.5,borderColor:'#444'}} />
+        </View>
+        <View style={styles.content}>
+          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingBottom:10}}>
+            <Text style={{fontSize:15}}>아이디</Text>
+            <TextInput style={{borderColor: '#aaa', width:'70%', height:35, borderWidth: 1, borderRadius: 5, padding:5}}/>
+          </View>
+          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingBottom:10}}>
+            <Text style={{fontSize:15}}>비밀번호</Text>
+            <TextInput style={{borderColor: '#aaa', width:'70%', height:35, borderWidth: 1, borderRadius: 5, padding:5}}/>
+          </View>
+        </View>
+        <View style={styles.footer}>
+          <CustomButton
+            buttonColor={'#444'}
+            title={'취소'}
+            onPress={() => alert('취소 버튼')}/>
+          <CustomButton
+          buttonColor={'#023e73'}
+          title={'확인'}
+          onPress={() => alert('확인 버튼')}/>
+        </View>
+      </View>
     );
-  };
-
-  return (
-  <SafeAreaView style={styles.container}>
-    <Text style={styles.appTitle}>Hello Todolist</Text>
-    <View style={styles.card}>
-      {/* <TodoInsert onAddTodo={addTodo}/> */}
-      <TodoInsert onAddTodo={addTodo}/>
-      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle}/>
-    </View>
-  </SafeAreaView>
-    
-    // <>
-    //   <StatusBar barStyle="dark-content" />
-    //   <SafeAreaView>
-    //     <ScrollView
-    //       contentInsetAdjustmentBehavior="automatic"
-    //       style={styles.scrollView}>
-    //       <Header />
-    //       {global.HermesInternal == null ? null : (
-    //         <View style={styles.engine}>
-    //           <Text style={styles.footer}>Engine: Hermes</Text>
-    //         </View>
-    //       )}
-    //       <View style={styles.body}>
-    //         <View style={styles.sectionContainer}>
-    //           <Text style={styles.sectionTitle}>Step One</Text>
-    //           <Text style={styles.sectionDescription}>
-    //             Edit <Text style={styles.highlight}>App.js</Text> to change this
-    //             screen and then come back to see your edits.
-    //           </Text>
-    //         </View>
-    //         <View style={styles.sectionContainer}>
-    //           <Text style={styles.sectionTitle}>See Your Changes</Text>
-    //           <Text style={styles.sectionDescription}>
-    //             <ReloadInstructions />
-    //           </Text>
-    //         </View>
-    //         <View style={styles.sectionContainer}>
-    //           <Text style={styles.sectionTitle}>Debug</Text>
-    //           <Text style={styles.sectionDescription}>
-    //             <DebugInstructions />
-    //           </Text>
-    //         </View>
-    //         <View style={styles.sectionContainer}>
-    //           <Text style={styles.sectionTitle}>Learn More</Text>
-    //           <Text style={styles.sectionDescription}>
-    //             Read the docs to discover what to do next:
-    //           </Text>
-    //         </View>
-    //         <LearnMoreLinks />
-    //       </View>
-    //     </ScrollView>
-    //   </SafeAreaView>
-    // </>
-  );
-};
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: 'white',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  header: {
+    width:'100%',
+    height:'5%',
+    //backgroundColor: '#ff9a9a',
   },
-  body: {
-    backgroundColor: Colors.white,
+  title: {
+    width:'100%',
+    height:'18%',
+    justifyContent: 'center',
+    //backgroundColor: '#9aa9ff',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
+  content: {
+    flex: 1,
+    paddingLeft:10,
+    paddingRight:10,
+    paddingBottom:30,
+    //backgroundColor: '#d6ca1a',
   },
   footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    width:'100%',
+    height:'20%',
+    //backgroundColor: '#1ad657',
   },
-  container:{
-    flex:1,
-    backgroundColor: '#3143e8',
-    //marginTop:10
-  },
-  appTitle:{
-    color:'#fff',
-    fontSize: 36,
-    fontWeight:'300',
-    textAlign:'center',
-    marginTop: 30,
-    backgroundColor:'#3143e8',
-    marginBottom: 30
-  },card: {
-    backgroundColor: '#fff',
-    flex: 1,
-    borderTopLeftRadius: 10, // to provide rounded corners
-    borderTopRightRadius: 10, // to provide rounded corners
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  input: {
-    padding: 20,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 1,
-    fontSize: 24,
-    marginLeft: 20,
-  }
 });
-
-export default App;
