@@ -1,69 +1,96 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, TextInput} from 'react-native';
-import CustomButton from './CustomButton';
+import * as React from 'react';
+import { View, Text, Button, TextInput } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-type Props = {};
-export default class Login extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.header} />
-        <View style={styles.title}>
-          <Text style={{fontSize:35,paddingBottom:20}}>로그인</Text>
-          <View style={{width:"100%",borderBottomWidth:0.5,borderColor:'#444'}} />
-        </View>
-        <View style={styles.content}>
-          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingBottom:10}}>
-            <Text style={{fontSize:15}}>아이디</Text>
-            <TextInput style={{borderColor: '#aaa', width:'70%', height:35, borderWidth: 1, borderRadius: 5, padding:5}}/>
-          </View>
-          <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingBottom:10}}>
-            <Text style={{fontSize:15}}>비밀번호</Text>
-            <TextInput style={{borderColor: '#aaa', width:'70%', height:35, borderWidth: 1, borderRadius: 5, padding:5}}/>
-          </View>
-        </View>
-        <View style={styles.footer}>
-          <CustomButton
-            buttonColor={'#444'}
-            title={'취소'}
-            onPress={() => alert('취소 버튼')}/>
-          <CustomButton
-          buttonColor={'#023e73'}
-          title={'확인'}
-          onPress={() => alert('확인 버튼')}/>
-        </View>
-      </View>
-    );
-  }
+function HomeScreen({ navigation, route }) {
+  React.useEffect(() => {
+    if (route.params?.post) {
+      // Post updated, do something with `route.params.post`
+      // For example, send the post to the server
+    }
+  }, [route.params?.post]);
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        title="Create post"
+        onPress={() => navigation.navigate('CreatePost')}
+      />
+      <Text style={{ margin: 10 }}>Post: {route.params?.post}</Text>
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: 'white',
-  },
-  header: {
-    width:'100%',
-    height:'5%',
-    //backgroundColor: '#ff9a9a',
-  },
-  title: {
-    width:'100%',
-    height:'18%',
-    justifyContent: 'center',
-    //backgroundColor: '#9aa9ff',
-  },
-  content: {
-    flex: 1,
-    paddingLeft:10,
-    paddingRight:10,
-    paddingBottom:30,
-    //backgroundColor: '#d6ca1a',
-  },
-  footer: {
-    width:'100%',
-    height:'20%',
-    //backgroundColor: '#1ad657',
-  },
-});
+function CreatePostScreen({ navigation, route }) {
+  const [postText, setPostText] = React.useState('');
+
+  return (
+    <>
+      <TextInput
+        multiline
+        placeholder="What's on your mind?"
+        style={{ height: 200, padding: 10, backgroundColor: 'white' }}
+        value={postText}
+        onChangeText={setPostText}
+      />
+      <Button
+        title="Done"
+        onPress={() => {
+          // Pass params back to home screen
+          navigation.navigate('Home', { post: postText });
+        }}
+      />
+    </>
+  );
+}
+
+function DetailsScreen({ route, navigation }) {
+  /* 2. Get the param */
+  const { itemId, otherParam } = route.params;
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details Screen</Text>
+      <Text>itemId: {JSON.stringify(itemId)}</Text>
+      <Text>otherParam: {JSON.stringify(otherParam)}</Text>
+      <Button
+        title="Go to Details... again"
+        onPress={() =>
+          navigation.push('Details', {
+            itemId: Math.floor(Math.random() * 100),
+          })
+        }
+      />
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+    </View>
+  );
+}
+
+
+const Stack = createStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+      <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Overview' }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreen}
+          initialParams={{ itemId: 42 }}
+        />
+        <Stack.Screen
+          name="CreatePost"
+          component={CreatePostScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
