@@ -1,96 +1,72 @@
-import * as React from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
 
-function HomeScreen({ navigation, route }) {
-  React.useEffect(() => {
-    if (route.params?.post) {
-      // Post updated, do something with `route.params.post`
-      // For example, send the post to the server
-    }
-  }, [route.params?.post]);
+import React, {useState} from 'react';
+import TodoList from './components/TodoList';
+import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
+import TodoInsert from './components/TodoInsert';
+
+const App = () => {
+  // todos: {id: Number, textValue: string, checked: boolean }
+  const [todos, setTodos] = useState([]);
+
+  const addTodo = text => {
+    setTodos([
+      ...todos,
+      {id: Math.random().toString(), textValue: text, checked: false},
+    ]);
+  };
+
+  const onRemove = id => e => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  const onToggle = id => e => {
+    setTodos(
+      todos.map(todo =>
+        todo.id === id ? {...todo, checked: !todo.checked} : todo,
+      ),
+    );
+  };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button
-        title="Create post"
-        onPress={() => navigation.navigate('CreatePost')}
-      />
-      <Text style={{ margin: 10 }}>Post: {route.params?.post}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.appTitle}>Hello Todolist</Text>
+      <View style={styles.card}>
+        <TodoInsert onAddTodo={addTodo} />
+        <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} />
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
-function CreatePostScreen({ navigation, route }) {
-  const [postText, setPostText] = React.useState('');
-
-  return (
-    <>
-      <TextInput
-        multiline
-        placeholder="What's on your mind?"
-        style={{ height: 200, padding: 10, backgroundColor: 'white' }}
-        value={postText}
-        onChangeText={setPostText}
-      />
-      <Button
-        title="Done"
-        onPress={() => {
-          // Pass params back to home screen
-          navigation.navigate('Home', { post: postText });
-        }}
-      />
-    </>
-  );
-}
-
-function DetailsScreen({ route, navigation }) {
-  /* 2. Get the param */
-  const { itemId, otherParam } = route.params;
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-      <Text>itemId: {JSON.stringify(itemId)}</Text>
-      <Text>otherParam: {JSON.stringify(otherParam)}</Text>
-      <Button
-        title="Go to Details... again"
-        onPress={() =>
-          navigation.push('Details', {
-            itemId: Math.floor(Math.random() * 100),
-          })
-        }
-      />
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-    </View>
-  );
-}
-
-
-const Stack = createStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-      <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Overview' }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          initialParams={{ itemId: 42 }}
-        />
-        <Stack.Screen
-          name="CreatePost"
-          component={CreatePostScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#3143e8',
+  },
+  appTitle: {
+    color: '#fff',
+    fontSize: 36,
+    marginTop: 30,
+    marginBottom: 30,
+    fontWeight: '300',
+    textAlign: 'center',
+    backgroundColor: '#3143e8',
+  },
+  card: {
+    backgroundColor: '#fff',
+    flex: 1,
+    borderTopLeftRadius: 10, // to provide rounded corners
+    borderTopRightRadius: 10, // to provide rounded corners
+    marginLeft: 10,
+    marginRight: 10,
+  },
+});
 
 export default App;
