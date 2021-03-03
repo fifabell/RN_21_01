@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import org.pgsqlite.SQLitePluginPackage;
+import org.pgsqlite.SQLitePluginPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.stonem.mssql.MSSQLPackage;
 import com.oblador.vectoricons.VectorIconsPackage;

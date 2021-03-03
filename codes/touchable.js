@@ -24,6 +24,10 @@ export default class Touchables extends Component {
             <Text style={styles.buttonText}>TouchableOpacity</Text>
           </View>
         </TouchableOpacity>
+        {/* hitslop 를 통해 터치영역 확장가능 */}
+        <TouchableOpacity hitSlop={{ top: 100, right: 10, bottom: 10, left: 10 }} style={styles.button}>
+          <Text>버튼</Text>
+        </TouchableOpacity>
         <TouchableNativeFeedback
             onPress={this._onPressButton}
             background={Platform.OS === 'android' ? TouchableNativeFeedback.SelectableBackground() : ''}>
