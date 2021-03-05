@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View, SafeAreaView, Image, Button, Alert,  } from 'react-native';
-
+import DeviceInfo, {
+  getApiLevel,
+  getBrand,
+  getVersion,
+  getBuildNumber,
+  getSystemVersion,
+  getUniqueId,
+  getModel,
+  getPhoneNumber
+} from 'react-native-device-info';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,8 +43,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1     // Add this to specify bottom border thickness
   },
 });
+// getPhoneNumber().then((phoneNumber) => {
+//   console.log(1.);
+//   console.log(phoneNumber);
+//   console.log(2.);
+// });
+// const uniqueID = DeviceInfo.getUniqueID();
+DeviceInfo.getPhoneNumber().then((phoneNumber) => {
+  // Android: null return: no permission, empty string: unprogrammed or empty SIM1, e.g. "+15555215558": normal return value
+  console.log("number: "+phoneNumber);
+});
 
-
+// DeviceInfo.getPhoneNumber().then((phoneNumber) => {
+//   // Android: null return: no permission, empty string: unprogrammed or empty SIM1, e.g. "+15555215558": normal return value
+//   console.log(3.);
+//   console.log(phoneNumber);
+//   console.log(4.);
+// });
 export default class AppView extends Component {
   render() {
     return (
